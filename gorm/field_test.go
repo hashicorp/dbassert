@@ -24,11 +24,11 @@ func Test_FieldDomain(t *testing.T) {
 	mockery := new(dbassert.MockTesting)
 	dbassert := New(mockery, conn, "postgres")
 
-	dbassert.FieldDomain(&TestModel{}, "PublicId", "dbasserts_public_id")
+	dbassert.Domain(&TestModel{}, "PublicId", "dbasserts_public_id")
 	mockery.AssertNoError(t)
 
 	mockery.Reset()
-	dbassert.FieldDomain(&TestModel{}, "nullable", "dbasserts_public_id")
+	dbassert.Domain(&TestModel{}, "nullable", "dbasserts_public_id")
 	mockery.AssertError(t)
 }
 
@@ -47,11 +47,11 @@ func Test_FieldNullable(t *testing.T) {
 	mockery := new(dbassert.MockTesting)
 	dbassert := New(mockery, conn, "postgres")
 
-	dbassert.FieldNullable(&TestModel{}, "Nullable")
+	dbassert.Nullable(&TestModel{}, "Nullable")
 	mockery.AssertNoError(t)
 
 	mockery.Reset()
-	dbassert.FieldNullable(&TestModel{}, "PublicId")
+	dbassert.Nullable(&TestModel{}, "PublicId")
 	mockery.AssertError(t)
 }
 
@@ -76,11 +76,11 @@ func Test_FieldIsNull(t *testing.T) {
 	mockery := new(dbassert.MockTesting)
 	dbassert := New(mockery, conn, "postgres")
 
-	dbassert.FieldIsNull(&m, "Nullable")
+	dbassert.IsNull(&m, "Nullable")
 	mockery.AssertNoError(t)
 
 	mockery.Reset()
-	dbassert.FieldIsNull(&m, "typeint")
+	dbassert.IsNull(&m, "typeint")
 	mockery.AssertError(t)
 }
 
@@ -105,10 +105,10 @@ func Test_FieldNotNull(t *testing.T) {
 	mockery := new(dbassert.MockTesting)
 	dbassert := New(mockery, conn, "postgres")
 
-	dbassert.FieldNotNull(&m, "Nullable")
+	dbassert.NotNull(&m, "Nullable")
 	mockery.AssertError(t)
 
 	mockery.Reset()
-	dbassert.FieldNotNull(&m, "typeint")
+	dbassert.NotNull(&m, "typeint")
 	mockery.AssertNoError(t)
 }

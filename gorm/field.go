@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// FieldIsNull asserts that the modelFieldName is null in the db.
-func (a *GormAsserts) FieldIsNull(model interface{}, modelFieldName string) bool {
+// IsNull asserts that the modelFieldName is null in the db.
+func (a *GormAsserts) IsNull(model interface{}, modelFieldName string) bool {
 	if h, ok := a.dbassert.T.(dbassert.THelper); ok {
 		h.Helper()
 	}
@@ -30,8 +30,8 @@ func (a *GormAsserts) FieldIsNull(model interface{}, modelFieldName string) bool
 	return true
 }
 
-// FieldNotNull asserts that the modelFieldName is not null in the db.
-func (a *GormAsserts) FieldNotNull(model interface{}, modelFieldName string) bool {
+// NotNull asserts that the modelFieldName is not null in the db.
+func (a *GormAsserts) NotNull(model interface{}, modelFieldName string) bool {
 	if h, ok := a.dbassert.T.(dbassert.THelper); ok {
 		h.Helper()
 	}
@@ -48,24 +48,24 @@ func (a *GormAsserts) FieldNotNull(model interface{}, modelFieldName string) boo
 	return true
 }
 
-// FieldNullable asserts that the modelFieldName nullable in the database.
-func (a *GormAsserts) FieldNullable(model interface{}, modelFieldName string) bool {
+// Nullable asserts that the modelFieldName nullable in the database.
+func (a *GormAsserts) Nullable(model interface{}, modelFieldName string) bool {
 	if h, ok := a.dbassert.T.(dbassert.THelper); ok {
 		h.Helper()
 	}
 	colName, err := findColumnName(a.gormDb, model, modelFieldName)
 	assert.NoError(a.dbassert.T, err)
-	return a.dbassert.ColumnNullable(tableName(a.gormDb, model), colName)
+	return a.dbassert.Nullable(tableName(a.gormDb, model), colName)
 }
 
-// FieldDomain asserts that the modelFieldName is the domainName in the database.
-func (a *GormAsserts) FieldDomain(model interface{}, modelFieldName, domainName string) bool {
+// Domain asserts that the modelFieldName is the domainName in the database.
+func (a *GormAsserts) Domain(model interface{}, modelFieldName, domainName string) bool {
 	if h, ok := a.dbassert.T.(dbassert.THelper); ok {
 		h.Helper()
 	}
 	colName, err := findColumnName(a.gormDb, model, modelFieldName)
 	assert.NoError(a.dbassert.T, err)
-	return a.dbassert.ColumnDomain(tableName(a.gormDb, model), colName, domainName)
+	return a.dbassert.Domain(tableName(a.gormDb, model), colName, domainName)
 }
 
 func tableName(db *gorm.DB, model interface{}) string {

@@ -43,13 +43,13 @@ func Test_ColumnNullable(t *testing.T) {
 	t.Run("nullable", func(t *testing.T) {
 		mockery := new(MockTesting)
 		assert := New(mockery, conn, "postgres")
-		assert.ColumnNullable("test_table_dbasserts", "nullable")
+		assert.Nullable("test_table_dbasserts", "nullable")
 		mockery.AssertNoError(t)
 	})
 	t.Run("typeInt", func(t *testing.T) {
 		mockery := new(MockTesting)
 		assert := New(mockery, conn, "postgres")
-		assert.ColumnNullable("test_table_dbasserts", "typeInt")
+		assert.Nullable("test_table_dbasserts", "typeInt")
 		mockery.AssertError(t)
 	})
 }
@@ -68,13 +68,13 @@ func Test_ColumnDomain(t *testing.T) {
 	t.Run("public_id", func(t *testing.T) {
 		mockery := new(MockTesting)
 		assert := New(mockery, conn, "postgres")
-		assert.ColumnDomain("test_table_dbasserts", "public_id", "dbasserts_public_id")
+		assert.Domain("test_table_dbasserts", "public_id", "dbasserts_public_id")
 		mockery.AssertNoError(t)
 	})
 	t.Run("nullable", func(t *testing.T) {
 		mockery := new(MockTesting)
 		assert := New(mockery, conn, "postgres")
-		assert.ColumnDomain("test_table_dbasserts", "nullable", "dbasserts_public_id")
+		assert.Domain("test_table_dbasserts", "nullable", "dbasserts_public_id")
 		mockery.AssertError(t)
 	})
 }

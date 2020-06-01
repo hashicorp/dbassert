@@ -28,8 +28,8 @@ type ColumnInfo struct {
 	IsNullable bool
 }
 
-// ColumnNullable asserts colName in tableName is nullable
-func (a *DbAsserts) ColumnNullable(tableName, colName string) bool {
+// Nullable asserts colName in tableName is nullable
+func (a *DbAsserts) Nullable(tableName, colName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}
@@ -41,8 +41,8 @@ func (a *DbAsserts) ColumnNullable(tableName, colName string) bool {
 	return false
 }
 
-// ColumnDomain asserts colName in tableName is domainName
-func (a *DbAsserts) ColumnDomain(tableName, colName, domainName string) bool {
+// Domain asserts colName in tableName is domainName
+func (a *DbAsserts) Domain(tableName, colName, domainName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}

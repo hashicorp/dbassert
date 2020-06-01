@@ -21,7 +21,7 @@
 //     		t.Fatal(err)
 //   	}
 // 	dbassert := dbassert.New(t, conn, "postgres")
-// 	dbassert.FieldIsNull(&someModel, "someField")
+// 	dbassert.IsNull(&someModel, "someField")
 // }
 
 package gorm
