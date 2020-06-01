@@ -24,10 +24,10 @@ func TestSomeDb(t *testing.T) {
 	dbassert := dbassert.New(t, conn, "postgres")
     
 	// assert that the db column is nullable
-	dbassert.ColumnNullable("some_table", "some_column")
+	dbassert.Nullable("some_table", "some_column")
 
 	// assert that the db column is a particular domain type
-	dbassert.ColumnDomain("test_table_dbasserts", "public_id", "dbasserts_public_id")
+	dbassert.Domain("test_table_dbasserts", "public_id", "dbasserts_public_id")
 
 }
 ```
@@ -55,16 +55,16 @@ func TestSomeGormModel(t *testing.T) {
 	dbassert := dbassert.New(t, conn, "postgres")
     
 	// assert that the db field is null
-	dbassert.FieldIsNull(&someModel, "SomeField")
+	dbassert.IsNull(&someModel, "SomeField")
 
 	// assert that the db field is not null
-	dbassert.FieldNotNull(&someModel, "SomeField")
+	dbassert.NotNull(&someModel, "SomeField")
 
 	// assert that the db field nullable
-	dbassert.FieldNullable(&someModel, "SomeField")
+	dbassert.Nullable(&someModel, "SomeField")
 
 	// assert that the db field is a particular domain type
-	dbassert.FieldDomain(&someModel, "SomeField", "some_domain_type")
+	dbassert.Domain(&someModel, "SomeField", "some_domain_type")
 }
 ```
 
