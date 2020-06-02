@@ -14,7 +14,7 @@ type GormAsserts struct {
 	gormDb   *gorm.DB
 }
 
-// New will create a new GormAsserts
+// New will create a new GormAsserts.
 func New(t dbassert.TestingT, db *sql.DB, dialect string) *GormAsserts {
 	assert.NotNil(t, db, "db is nill")
 	assert.NotEmpty(t, dialect, "dialect is not set")

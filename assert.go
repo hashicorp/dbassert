@@ -10,14 +10,15 @@ import (
 
 var ErrNilTestingT = errors.New("TestingT is nil")
 
-// DbAsserts provides database assertion methods around the TestingT interface
+// DbAsserts provides database assertion methods around the TestingT
+// interface.
 type DbAsserts struct {
 	T       TestingT
 	Db      *sql.DB
 	Dialect string
 }
 
-// New creates a new DbAsserts
+// New creates a new DbAsserts.
 func New(t TestingT, db *sql.DB, dialect string) *DbAsserts {
 	if isNil(t) {
 		panic(ErrNilTestingT)

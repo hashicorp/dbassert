@@ -7,28 +7,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// ColumnInfo defines a set of information about a column
+// ColumnInfo defines a set of information about a column.
 type ColumnInfo struct {
-	// TableName for the column
+	// TableName for the column.
 	TableName string
 
-	// Name of the column
+	// Name of the column.
 	Name string
 
-	// Default value for the column
+	// Default value for the column.
 	Default string
 
-	// Type of the column
+	// Type of the column.
 	Type string
 
-	// DomainName for the column
+	// DomainName for the column.
 	DomainName string
 
-	// IsNullable defines if the column can be null
+	// IsNullable defines if the column can be null.
 	IsNullable bool
 }
 
-// Nullable asserts colName in tableName is nullable
+// Nullable asserts colName in tableName is nullable.
 func (a *DbAsserts) Nullable(tableName, colName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
@@ -45,7 +45,7 @@ func (a *DbAsserts) Nullable(tableName, colName string) bool {
 	return false
 }
 
-// Domain asserts colName in tableName is domainName
+// Domain asserts colName in tableName is domainName.
 func (a *DbAsserts) Domain(tableName, colName, domainName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
@@ -62,7 +62,7 @@ func (a *DbAsserts) Domain(tableName, colName, domainName string) bool {
 	return false
 }
 
-// Column asserts c ColumnInfo is valid
+// Column asserts c ColumnInfo is valid.
 func (a *DbAsserts) Column(c ColumnInfo) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()

@@ -16,10 +16,10 @@ type TestModel struct {
 }
 
 // TableName is required by Gorm to define the model's table name when it
-// doesn't match the model's Go type name
+// doesn't match the model's Go type name.
 func (*TestModel) TableName() string { return "test_table_dbasserts" }
 
-// CreateTestModel is a helper that creates a testModel in the DB
+// CreateTestModel is a helper that creates a testModel in the DB.
 func CreateTestModel(t dbassert.TestingT, db *gorm.DB, nullable *string, typeInt *int) *TestModel {
 	publicId, err := base62.Random(12)
 	assert.NoError(t, err)
