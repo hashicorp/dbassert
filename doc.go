@@ -10,7 +10,7 @@
 //	)
 //
 //	func TestSomeDatabase(t *testing.T) {
-//		db, err := sql.Open("postgres", "postgres://postgres:secret@localhost:%s?sslmode=disable")
+//		db, err := sql.Open("postgres", "postgres://postgres:secret@localhost:db?sslmode=disable")
 //		if err != nil {
 //			t.Fatal(err)
 //		}
