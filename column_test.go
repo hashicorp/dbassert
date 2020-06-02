@@ -87,7 +87,7 @@ func TestDbAsserts_Column(t *testing.T) {
 			a := New(mockery, conn, "postgres")
 
 			if got := a.Column(tt.column); got != tt.want {
-				t.Errorf("DbAsserts.Nullable() = %v, want %v", got, tt.want)
+				t.Errorf("Column() = %v, want %v", got, tt.want)
 			}
 			switch {
 			case tt.want:
@@ -151,7 +151,7 @@ func TestDbAsserts_Domain(t *testing.T) {
 			a := New(mockery, conn, "postgres")
 
 			if got := a.Domain(tt.tableName, tt.colName, tt.domain); got != tt.want {
-				t.Errorf("DbAsserts.Nullable() = %v, want %v", got, tt.want)
+				t.Errorf("Domain() = %v, want %v", got, tt.want)
 			}
 			switch {
 			case tt.want:
@@ -211,7 +211,7 @@ func TestDbAsserts_Nullable(t *testing.T) {
 			a := New(mockery, conn, "postgres")
 
 			if got := a.Nullable(tt.tableName, tt.colName); got != tt.want {
-				t.Errorf("DbAsserts.Nullable() = %v, want %v", got, tt.want)
+				t.Errorf("Nullable() = %v, want %v", got, tt.want)
 			}
 			switch {
 			case tt.want:
