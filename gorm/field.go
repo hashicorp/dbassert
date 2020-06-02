@@ -81,7 +81,8 @@ func (a *GormAsserts) Nullable(model interface{}, modelFieldName string) bool {
 	return a.dbassert.Nullable(tableName(a.gormDb, model), colName)
 }
 
-// Domain asserts that the modelFieldName is the domainName in the database.
+// Domain asserts that the modelFieldName is the domainName in the
+// database.
 func (a *GormAsserts) Domain(model interface{}, modelFieldName, domainName string) bool {
 	if h, ok := a.dbassert.T.(dbassert.THelper); ok {
 		h.Helper()
@@ -98,7 +99,8 @@ func tableName(db *gorm.DB, model interface{}) string {
 	return db.NewScope(model).TableName()
 }
 
-// findColumnName will find the model's db column name using the fieldName parameter
+// findColumnName will find the model's db column name using the fieldName
+// parameter.
 func findColumnName(db *gorm.DB, model interface{}, fieldName string) (string, error) {
 	for _, f := range db.NewScope(model).GetStructFields() {
 		if strings.EqualFold(fieldName, f.Name) {
