@@ -33,7 +33,11 @@ func (a *DbAsserts) Nullable(tableName, colName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}
-	dbColumn := a.getSchemaInfo(tableName, colName)
+	dbColumn, err := a.getSchemaInfo(tableName, colName)
+	if err != nil {
+		assert.FailNow(a.T, err.Error())
+		return false
+	}
 	if dbColumn.IsNullable {
 		return true
 	}
@@ -46,7 +50,11 @@ func (a *DbAsserts) Domain(tableName, colName, domainName string) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}
-	dbColumn := a.getSchemaInfo(tableName, colName)
+	dbColumn, err := a.getSchemaInfo(tableName, colName)
+	if err != nil {
+		assert.FailNow(a.T, err.Error())
+		return false
+	}
 	if strings.EqualFold(domainName, dbColumn.DomainName) {
 		return true
 	}
@@ -59,15 +67,19 @@ func (a *DbAsserts) Column(c ColumnInfo) bool {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}
-	dbColumn := a.getSchemaInfo(c.TableName, c.Name)
-	if c != dbColumn {
-		assert.Fail(a.T, "invalid column", "%s: %+v column is not valid in the db columns %+v", c.TableName, c, dbColumn)
+	dbColumn, err := a.getSchemaInfo(c.TableName, c.Name)
+	if err != nil {
+		assert.FailNow(a.T, err.Error())
+		return false
+	}
+	if c != *dbColumn {
+		assert.Fail(a.T, "invalid column", "%s: %+v column is not valid in the db column %+v", c.TableName, c, dbColumn)
 		return false
 	}
 	return true
 }
 
-func (a *DbAsserts) getSchemaInfo(tableName, columnName string) ColumnInfo {
+func (a *DbAsserts) getSchemaInfo(tableName, columnName string) (*ColumnInfo, error) {
 	if h, ok := a.T.(THelper); ok {
 		h.Helper()
 	}
@@ -85,21 +97,22 @@ where table_name = $1 and column_name = $2`
 
 	var table, colName, colType, colIsNullable string
 	var colDefault, colDomainName sql.NullString
-	err := row.Scan(&table, &colName, &colDefault, &colType, &colDomainName, &colIsNullable)
-	assert.NoError(a.T, err)
+	if err := row.Scan(&table, &colName, &colDefault, &colType, &colDomainName, &colIsNullable); err != nil {
+		return nil, err
+	}
 
 	var nullable bool
 	if colIsNullable == "YES" {
 		nullable = true
 	}
-	return ColumnInfo{
+	return &ColumnInfo{
 		TableName:  tableName,
 		Name:       colName,
 		Default:    NullableString(colDefault),
 		Type:       colType,
 		DomainName: NullableString(colDomainName),
 		IsNullable: nullable,
-	}
+	}, nil
 }
 
 // NullableString is a type alias for nullable database columns for strings.
