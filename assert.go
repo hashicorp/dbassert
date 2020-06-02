@@ -44,6 +44,7 @@ func New(t TestingT, db *sql.DB, dialect string) *DbAsserts {
 // TestingT is the testing interface used by the dbassert package.
 type TestingT interface {
 	Errorf(format string, args ...interface{})
+	FailNow()
 }
 
 // THelper is the helper interface used by the dbassert package.
