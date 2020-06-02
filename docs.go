@@ -16,7 +16,7 @@
 // 	}
 // 	defer db.Close()
 // 	dbassert := dbassert.New(t, conn, "postgres")
-// 	dbassert.ColumnNullable("some_table_name", "some_column")
+// 	dbassert.Nullable("some_table_name", "some_column")
 // }
 
 package dbassert
