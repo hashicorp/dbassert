@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_FieldDomain(t *testing.T) {
+func TestDbAsserts_Domain(t *testing.T) {
 	t.Parallel()
 	cleanup, conn, _ := dbassert.TestSetup(t, "postgres")
 	defer func() {
@@ -20,19 +20,61 @@ func Test_FieldDomain(t *testing.T) {
 			t.Error(err)
 		}
 	}()
+	cases := []struct {
+		name      string
+		model     interface{}
+		fieldName string
+		domain    string
+		want      bool
+	}{
+		{
+			name:      "nullable",
+			model:     &TestModel{},
+			fieldName: "nullable",
+			domain:    "dbasserts_public_id",
+			want:      false,
+		},
+		{
+			name:      "public_id",
+			model:     &TestModel{},
+			fieldName: "PublicId",
+			domain:    "dbasserts_public_id",
+			want:      true,
+		},
+		{
+			name:      "bad_column",
+			model:     &TestModel{},
+			fieldName: "BadField",
+			domain:    "dbasserts_public_id",
+			want:      false,
+		},
+		{
+			name:      "nil_model",
+			model:     nil,
+			fieldName: "public_id",
+			domain:    "dbasserts_public_id",
+			want:      false,
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			mockery := new(dbassert.MockTesting)
+			a := New(mockery, conn, "postgres")
 
-	mockery := new(dbassert.MockTesting)
-	dbassert := New(mockery, conn, "postgres")
-
-	dbassert.Domain(&TestModel{}, "PublicId", "dbasserts_public_id")
-	mockery.AssertNoError(t)
-
-	mockery.Reset()
-	dbassert.Domain(&TestModel{}, "nullable", "dbasserts_public_id")
-	mockery.AssertError(t)
+			if got := a.Domain(tt.model, tt.fieldName, tt.domain); got != tt.want {
+				t.Errorf("Domain() = %v, want %v", got, tt.want)
+			}
+			switch {
+			case tt.want:
+				mockery.AssertNoError(t)
+			default:
+				mockery.AssertError(t)
+			}
+		})
+	}
 }
 
-func Test_FieldNullable(t *testing.T) {
+func TestDbAsserts_Nullable(t *testing.T) {
 	t.Parallel()
 	cleanup, conn, _ := dbassert.TestSetup(t, "postgres")
 	defer func() {
@@ -43,19 +85,56 @@ func Test_FieldNullable(t *testing.T) {
 			t.Error(err)
 		}
 	}()
+	cases := []struct {
+		name  string
+		model interface{}
+		fName string
+		want  bool
+	}{
+		{
+			name:  "nullable",
+			model: &TestModel{},
+			fName: "nullable",
+			want:  true,
+		},
+		{
+			name:  "badField",
+			model: &TestModel{},
+			fName: "badField",
+			want:  false,
+		},
+		{
+			name:  "TypeInt",
+			model: &TestModel{},
+			fName: "TypeInt",
+			want:  true,
+		},
+		{
+			name:  "PublicId",
+			model: &TestModel{},
+			fName: "PublicId",
+			want:  false,
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			mockery := new(dbassert.MockTesting)
+			a := New(mockery, conn, "postgres")
 
-	mockery := new(dbassert.MockTesting)
-	dbassert := New(mockery, conn, "postgres")
-
-	dbassert.Nullable(&TestModel{}, "Nullable")
-	mockery.AssertNoError(t)
-
-	mockery.Reset()
-	dbassert.Nullable(&TestModel{}, "PublicId")
-	mockery.AssertError(t)
+			if got := a.Nullable(tt.model, tt.fName); got != tt.want {
+				t.Errorf("Nullable() = %v, want %v", got, tt.want)
+			}
+			switch {
+			case tt.want:
+				mockery.AssertNoError(t)
+			default:
+				mockery.AssertError(t)
+			}
+		})
+	}
 }
 
-func Test_FieldIsNull(t *testing.T) {
+func TestDbAsserts_IsNull(t *testing.T) {
 	t.Parallel()
 	cleanup, conn, _ := dbassert.TestSetup(t, "postgres")
 	defer func() {
@@ -66,25 +145,64 @@ func Test_FieldIsNull(t *testing.T) {
 			t.Error(err)
 		}
 	}()
-	assert := assert.New(t)
+
 	db, err := gorm.Open("postgres", conn)
-	assert.NoError(err)
+	assert.NoError(t, err)
 
 	v := 1
 	m := CreateTestModel(t, db, nil, &v)
 
-	mockery := new(dbassert.MockTesting)
-	dbassert := New(mockery, conn, "postgres")
+	cases := []struct {
+		name  string
+		model interface{}
+		fName string
+		want  bool
+	}{
+		{
+			name:  "nullable",
+			model: m,
+			fName: "nullable",
+			want:  true,
+		},
+		{
+			name:  "badField",
+			model: m,
+			fName: "badField",
+			want:  false,
+		},
+		{
+			name:  "TypeInt",
+			model: m,
+			fName: "TypeInt",
+			want:  false,
+		},
+		{
+			name:  "nil model",
+			model: nil,
+			fName: "PublicId",
+			want:  false,
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
 
-	dbassert.IsNull(&m, "Nullable")
-	mockery.AssertNoError(t)
+			mockery := new(dbassert.MockTesting)
+			a := New(mockery, conn, "postgres")
 
-	mockery.Reset()
-	dbassert.IsNull(&m, "typeint")
-	mockery.AssertError(t)
+			if got := a.IsNull(tt.model, tt.fName); got != tt.want {
+				t.Errorf("IsNull() = %v, want %v", got, tt.want)
+			}
+			switch {
+			case tt.want:
+				mockery.AssertNoError(t)
+			default:
+				mockery.AssertError(t)
+			}
+		})
+	}
 }
 
-func Test_FieldNotNull(t *testing.T) {
+func TestDbAsserts_NotNull(t *testing.T) {
 	t.Parallel()
 	cleanup, conn, _ := dbassert.TestSetup(t, "postgres")
 	defer func() {
@@ -95,20 +213,59 @@ func Test_FieldNotNull(t *testing.T) {
 			t.Error(err)
 		}
 	}()
-	assert := assert.New(t)
+
 	db, err := gorm.Open("postgres", conn)
-	assert.NoError(err)
+	assert.NoError(t, err)
 
 	v := 1
 	m := CreateTestModel(t, db, nil, &v)
 
-	mockery := new(dbassert.MockTesting)
-	dbassert := New(mockery, conn, "postgres")
+	cases := []struct {
+		name  string
+		model interface{}
+		fName string
+		want  bool
+	}{
+		{
+			name:  "nullable",
+			model: m,
+			fName: "nullable",
+			want:  false,
+		},
+		{
+			name:  "badField",
+			model: m,
+			fName: "badField",
+			want:  false,
+		},
+		{
+			name:  "TypeInt",
+			model: m,
+			fName: "TypeInt",
+			want:  true,
+		},
+		{
+			name:  "nil model",
+			model: nil,
+			fName: "PublicId",
+			want:  false,
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
 
-	dbassert.NotNull(&m, "Nullable")
-	mockery.AssertError(t)
+			mockery := new(dbassert.MockTesting)
+			a := New(mockery, conn, "postgres")
 
-	mockery.Reset()
-	dbassert.NotNull(&m, "typeint")
-	mockery.AssertNoError(t)
+			if got := a.NotNull(tt.model, tt.fName); got != tt.want {
+				t.Errorf("NotNull() = %v, want %v", got, tt.want)
+			}
+			switch {
+			case tt.want:
+				mockery.AssertNoError(t)
+			default:
+				mockery.AssertError(t)
+			}
+		})
+	}
 }
