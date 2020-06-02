@@ -30,6 +30,8 @@ func New(t dbassert.TestingT, db *sql.DB, dialect string) *GormAsserts {
 		gormDb: gormDb,
 	}
 }
+
+// DbLog enable/disable log of database queries.
 func (a *GormAsserts) DbLog(enable bool) {
 	a.gormDb.LogMode(enable)
 }
