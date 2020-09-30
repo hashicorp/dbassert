@@ -25,7 +25,7 @@ func startDbInDockerSupported(dialect string) (cleanup func() error, retURL, con
 	var url string
 	switch dialect {
 	case "postgres":
-		resource, err = pool.Run("postgres", "latest", []string{"POSTGRES_PASSWORD=secret", "POSTGRES_DB=watchtower"})
+		resource, err = pool.Run("postgres", "latest", []string{"POSTGRES_PASSWORD=secret"})
 		url = "postgres://postgres:secret@localhost:%s?sslmode=disable"
 	default:
 		panic(fmt.Sprintf("unknown dialect %q", dialect))
