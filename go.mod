@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/vault/sdk v0.14.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/lib/pq v1.10.9
-	github.com/ory/dockertest/v3 v3.11.0
+	github.com/ory/dockertest/v3 v3.12.0
 	github.com/stretchr/testify v1.10.0
 )
 
