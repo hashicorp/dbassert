@@ -1,4 +1,4 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright IBM Corp. 2020, 2025
 // SPDX-License-Identifier: MPL-2.0
 
 // Package gorm provides a set of assertions for testing Go database
