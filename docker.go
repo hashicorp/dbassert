@@ -52,8 +52,8 @@ func startDbInDockerSupported(dialect string) (cleanup func() error, retURL, con
 		if err := db.Ping(); err != nil {
 			return err
 		}
-		defer db.Close()
-		return nil
+		err = db.Close()
+		return err
 	}); err != nil {
 		return func() error { return nil }, "", "", fmt.Errorf("could not connect to docker: %w", err)
 	}
@@ -73,5 +73,5 @@ func cleanupDockerResource(pool *dockertest.Pool, resource *dockertest.Resource)
 	if strings.Contains(err.Error(), "No such container") {
 		return nil
 	}
-	return fmt.Errorf("Failed to cleanup local container: %s", err)
+	return fmt.Errorf("failed to cleanup local container: %s", err)
 }
