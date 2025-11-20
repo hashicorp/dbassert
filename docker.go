@@ -1,7 +1,7 @@
 // Copyright IBM Corp. 2020, 2025
 // SPDX-License-Identifier: MPL-2.0
 
-// +build linux darwin windows
+//go:build linux || darwin || windows
 
 package dbassert
 
