@@ -3,7 +3,7 @@ module github.com/hashicorp/dbassert
 go 1.25.0
 
 require (
-	github.com/hashicorp/vault/sdk v0.21.0
+	github.com/hashicorp/vault/sdk v0.23.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/lib/pq v1.11.1
 	github.com/ory/dockertest/v3 v3.12.0
